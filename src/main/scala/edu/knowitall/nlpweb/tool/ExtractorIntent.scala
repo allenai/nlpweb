@@ -12,20 +12,22 @@ import edu.knowitall.nlpweb.tool.extractor.Extractors.Extractor
 object ExtractorIntent
 extends ToolIntent[Extractor]("extract",
     List(
+    /*
         "reverb" -> "ReVerbExtractor",
         "relnoun" -> "RelnounExtractor",
         "nesty" -> "NestyExtractor",
         "srl" -> "SrlExtractor",
-        "srl-triple" -> "SrlTripleExtractor")) {
+        "srl-triple" -> "SrlTripleExtractor"*/)) {
   override val info = "Enter sentences from which to extract relations, one per line."
 
-  def constructors: PartialFunction[String, Extractor] = {
+  def constructors = PartialFunction.empty[String, Extractor]
+  /*
     case "ReVerbExtractor" => extractor.Extractors.ReVerb
     case "RelnounExtractor" => extractor.Extractors.Relnoun
     case "NestyExtractor" => extractor.Extractors.Nesty
     case "SrlExtractor" => extractor.Extractors.Srl.Nary
     case "SrlTripleExtractor" => extractor.Extractors.Srl.Triple
-  }
+    */
   override def config[A](req: unfiltered.request.HttpRequest[A], tool: String) = {
     val currentExtractor = tool
     (for (extractor <- this.shortNames) yield {

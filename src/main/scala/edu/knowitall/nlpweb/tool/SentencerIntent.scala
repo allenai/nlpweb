@@ -2,10 +2,13 @@ package edu.knowitall
 package nlpweb
 package tool
 
-import common.Timing
 import edu.knowitall.nlpweb.ToolIntent
-import edu.knowitall.tool.segment.Segmenter
 import edu.knowitall.tool.segment.RemoteSegmenter
+import edu.knowitall.tool.segment.Segmenter
+
+import common.Timing
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object SentencerIntent
 extends ToolIntent[Segmenter]("sentence", List("opennlp" -> "OpenNlpSentencer")) {

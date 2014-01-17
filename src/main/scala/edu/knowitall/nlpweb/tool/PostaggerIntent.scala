@@ -2,21 +2,20 @@ package edu.knowitall
 package nlpweb
 package tool
 
-import java.net.URL
-
-import scala.Array.canBuildFrom
-
-import org.apache.commons.lang.NotImplementedException
-
-import common.Timing
 import edu.knowitall.nlpweb.ToolIntent
 import edu.knowitall.nlpweb.visualize.Whatswrong.CanWrite
 import edu.knowitall.tool.postag.PostaggedToken
 import edu.knowitall.tool.postag.Postagger
 import edu.knowitall.tool.postag.RemotePostagger
+
+import common.Timing
 import visualize.Whatswrong.Base64String
 import visualize.Whatswrong.CanWrite
 import visualize.Whatswrong.writeGraphic2Base64
+
+import java.net.URL
+import scala.Array.canBuildFrom
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object PostaggerIntent
 extends ToolIntent[Postagger]("postag",

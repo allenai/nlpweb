@@ -2,18 +2,20 @@ package edu.knowitall
 package nlpweb
 package tool
 
-import common.Timing
-import unfiltered.request.HttpRequest
+import edu.knowitall.tool.parse.DependencyParser
+import edu.knowitall.tool.parse.graph.DependencyGraph
 import edu.knowitall.tool.srl.Frame
 import edu.knowitall.tool.srl.FrameHierarchy
-import edu.knowitall.tool.parse.graph.DependencyGraph
 import edu.knowitall.tool.srl.RemoteSrl
-import edu.knowitall.tool.parse.DependencyParser
 import edu.knowitall.tool.srl.Srl
 
+import common.Timing
+import unfiltered.request.HttpRequest
+
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.control.Exception
 
-case class SrlPackage(frames: Seq[Frame], graph: DependencyGraph)
+case class SrlPackage(frames: Seq[Frame], graph: DependencyGraph, text: String)
 abstract class CompleteSrl {
   def apply(sentence: String): SrlPackage
 }
@@ -21,11 +23,8 @@ object CompleteSrl {
   def from(parser: DependencyParser, srl: Srl) = {
     new CompleteSrl {
       override def apply(sentence: String) = {
-        val graph = (Exception.catching(classOf[Exception]) opt DependencyGraph.deserialize(sentence)) match {
-          case Some(graph) => graph
-          case None => parser(sentence)
-        }
-        SrlPackage(srl(graph), graph)
+        val (postags, graph) = parser(sentence)
+        SrlPackage(srl(graph), graph, sentence)
       }
     }
   }
@@ -60,7 +59,7 @@ extends ToolIntent[CompleteSrl]("srl", List("clear" -> "ClearSrl")) {
 
   case class FrameSet(sentence: String, frames: Seq[Frame])
   def buildTable(set: SrlPackage) = {
-    "<table><tr><th colspan=\"4\">" + set.graph.text + "</th></tr>" + set.frames.map{
+    "<table><tr><th colspan=\"4\">" + set.text + "</th></tr>" + set.frames.map{
       case Frame(relation, arguments) =>
         "<tr><td>" + relation + "</td><td>" + arguments.mkString("; ") + "</td></tr>"
     }.mkString("\n") + "</table><br/><br/>"
@@ -84,6 +83,6 @@ extends ToolIntent[CompleteSrl]("srl", List("clear" -> "ClearSrl")) {
     val frameSets = Seq(frames)
     val hierarchySets = Seq(FrameHierarchy.fromFrames(frames.graph, frames.frames.toIndexedSeq))
     ("time: " + Timing.Milliseconds.format(srlTime),
-    "<p>" + frameSets.flatMap(_.frames).size + " frame(s):</p>" + frameSets.map(buildTable(_)).mkString("\n") + hierarchySets.map(_.mkString("<p>", "<br />", "</p>")).mkString("\n") + (frameSets flatMap {case SrlPackage(frames, graph) => frames map (frame => image((graph, frame)))}).mkString("<p>", "<br />\n", "</p>") + "<p><pre>" + frames.frames.map(_.serialize).mkString("\n") + "</pre></p>")
+    "<p>" + frameSets.flatMap(_.frames).size + " frame(s):</p>" + frameSets.map(buildTable(_)).mkString("\n") + hierarchySets.map(_.mkString("<p>", "<br />", "</p>")).mkString("\n") + (frameSets flatMap {case SrlPackage(frames, graph, text) => frames map (frame => image((graph, frame)))}).mkString("<p>", "<br />\n", "</p>") + "<p><pre>" + frames.frames.map(_.serialize).mkString("\n") + "</pre></p>")
   }
 }

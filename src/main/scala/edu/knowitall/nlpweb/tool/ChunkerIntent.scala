@@ -2,23 +2,23 @@ package edu.knowitall
 package nlpweb
 package tool
 
-import scala.Array.canBuildFrom
-
-import common.Timing
 import edu.knowitall.nlpweb.ToolIntent
 import edu.knowitall.nlpweb.visualize.Whatswrong.CanWrite
-import edu.knowitall.tool.chunk.ChunkedToken
-import edu.knowitall.tool.chunk.Chunker
-import edu.knowitall.tool.chunk.RemoteChunker
+import edu.knowitall.tool.chunk._
+
+import common.Timing
 import visualize.Whatswrong.Base64String
 import visualize.Whatswrong.writeGraphic2Base64
+
+import scala.Array.canBuildFrom
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object ChunkerIntent extends ToolIntent[Chunker]("chunk", List("opennlp" -> "OpenNlpChunker")) {
   override val info = "Enter sentences to be chunked, one per line."
 
-  def constructors = PartialFunction.empty[String, Chunker] /* = {
+  def constructors: PartialFunction[String, Chunker] = {
     case "OpenNlpChunker" => new OpenNlpChunker()
-  }*/
+  }
   override def remote(url: java.net.URL) = new RemoteChunker(url.toString)
 
   def image(tokens: Seq[ChunkedToken]) = {

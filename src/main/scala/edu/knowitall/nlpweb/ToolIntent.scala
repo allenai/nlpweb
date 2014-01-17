@@ -9,7 +9,6 @@ import edu.knowitall.nlpweb.persist.Param
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import java.net.URL
-import org.apache.commons.lang.NotImplementedException
 
 /***
  * @param toolNames (shortName, longName)
@@ -18,7 +17,7 @@ abstract class ToolIntent[T](val path: String, val toolNames: Seq[(String, Strin
   val logger = LoggerFactory.getLogger(this.getClass)
 
   def constructors: PartialFunction[String, T]
-  def remote(url: URL): T = throw new NotImplementedException("No remote implementation for: " + url)
+  def remote(url: URL): T = throw new UnsupportedOperationException("No remote implementation for: " + url)
 
   def shortNames = toolNames.iterator.map(_._1)
   def longNames = toolNames.iterator.map(_._2)

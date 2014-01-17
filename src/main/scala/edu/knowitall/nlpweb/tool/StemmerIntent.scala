@@ -1,11 +1,14 @@
 package edu.knowitall
 package nlpweb.tool
 
-import scala.Array.canBuildFrom
-import edu.knowitall.tool.stem.{MorphaStemmer, PorterStemmer, EnglishStemmer, Stemmer}
 import edu.knowitall.nlpweb.ToolIntent
-import unfiltered.request.HttpRequest
 import edu.knowitall.tool.stem.RemoteStemmer
+import edu.knowitall.tool.stem.{MorphaStemmer, PorterStemmer, EnglishStemmer, Stemmer}
+
+import unfiltered.request.HttpRequest
+
+import scala.Array.canBuildFrom
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object StemmerIntent
 extends ToolIntent[Stemmer]("stem",
@@ -20,7 +23,7 @@ extends ToolIntent[Stemmer]("stem",
     case "PorterStemmer" => new PorterStemmer()
     case "EnglishStemmer" => new EnglishStemmer()
   }
-  
+
   override def remote(url: java.net.URL) = new RemoteStemmer(url.toString)
 
   override def post[A](shortToolName: String, text: String, params: Map[String, String]) = {

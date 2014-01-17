@@ -51,9 +51,9 @@ object Whatswrong {
       target.addProperty(new TokenProperty("chunk", 2), source.chunk)
     }
   }
-  implicit def tokenizeNode(implicit tokenizer: WhatswrongTokenizer[PostaggedToken]): WhatswrongTokenizer[DependencyNode] = new WhatswrongTokenizer[DependencyNode] {
-    def tokenize(source: DependencyNode, target: com.googlecode.whatswrong.Token) {
-      tokenizer.tokenize(source, target)
+  implicit def tokenizeNode: WhatswrongTokenizer[DependencyNode] = new WhatswrongTokenizer[DependencyNode] {
+    def tokenize(source: DependencyNode, target: com.googlecode.whatswrong.Token) = {
+      target.addProperty(new TokenProperty("text", 0), source.string)
     }
   }
   def seq2Instance[A](seq: Seq[A])(implicit tokenizer: WhatswrongTokenizer[A]) = {
@@ -71,8 +71,8 @@ object Whatswrong {
 
     // add edges
     for (edge <- graph.dependencies) {
-      val source = edge.source.indices.head
-      val dest = edge.dest.indices.head
+      val source = edge.source.id
+      val dest = edge.dest.id
       inst.addDependency(source, dest, edge.label, edge.label)
     }
 
@@ -112,11 +112,11 @@ object Whatswrong {
       val (graph, frame) = srl
       val inst = graph2Instance(graph)
       var indices = Set.empty[Int]
-      inst.addSpan(frame.relation.node.indices.head, frame.relation.node.indices.head, frame.relation.toString, "relation")
-      indices += frame.relation.node.indices.head
+      inst.addSpan(frame.relation.node.id, frame.relation.node.id, frame.relation.toString, "relation")
+      indices += frame.relation.node.id
       for (argument <- frame.arguments) {
-        inst.addSpan(argument.node.indices.head, argument.node.indices.head, argument.role.label, "argument")
-        indices += argument.node.indices.head
+        inst.addSpan(argument.node.id, argument.node.id, argument.role.label, "argument")
+        indices += argument.node.id
       }
       render(inst)
     }

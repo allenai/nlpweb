@@ -2,13 +2,16 @@ package edu.knowitall
 package nlpweb
 package tool
 
-import scala.Array.canBuildFrom
+import edu.knowitall.tool.tokenize.RemoteTokenizer
+import edu.knowitall.tool.tokenize.Token
+import edu.knowitall.tool.tokenize.Tokenizer
+
 import common.Timing
 import unfiltered.request.HttpRequest
-import edu.knowitall.tool.tokenize.Token
+
 import java.awt.image.BufferedImage
-import edu.knowitall.tool.tokenize.Tokenizer
-import edu.knowitall.tool.tokenize.RemoteTokenizer
+import scala.Array.canBuildFrom
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object TokenizerIntent
 extends ToolIntent[Tokenizer]("tokenize",

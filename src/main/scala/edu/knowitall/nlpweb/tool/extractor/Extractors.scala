@@ -1,18 +1,20 @@
 package edu.knowitall.nlpweb.tool.extractor
 
-import edu.knowitall.srlie.SrlExtractor
-import edu.knowitall.srlie.confidence.SrlConfidenceFunction
-import edu.knowitall.tool.chunk.OpenNlpChunker
-import edu.knowitall.nlpweb.tool.ParserIntent
-import edu.knowitall.tool.chunk.ChunkedToken
-import edu.knowitall.chunkedextractor.ReVerb
-import edu.knowitall.nlpweb.tool.ChunkerIntent
+/*
+import edu.knowitall.chunkedextractor.Nesty
 import edu.knowitall.chunkedextractor.R2A2
 import edu.knowitall.chunkedextractor.Relnoun
-import edu.knowitall.nlpweb.tool.StemmerIntent
+import edu.knowitall.chunkedextractor.ReVerb
+import edu.knowitall.nlpweb.tool.ChunkerIntent
+import edu.knowitall.nlpweb.tool.ParserIntent
 import edu.knowitall.nlpweb.tool.SrlIntent
-import edu.knowitall.chunkedextractor.Nesty
+import edu.knowitall.nlpweb.tool.StemmerIntent
+import edu.knowitall.srlie.confidence.SrlConfidenceFunction
+import edu.knowitall.srlie.SrlExtractor
+import edu.knowitall.tool.chunk.ChunkedToken
+import edu.knowitall.tool.chunk.OpenNlpChunker
 import edu.knowitall.tool.parse.DependencyParser
+*/
 
 object Extractors {
   abstract class Extractor(val name: String) {
@@ -20,6 +22,7 @@ object Extractors {
     def apply(sentence: String) = extract(sentence)
   }
 
+/*
   object ReVerb extends Extractor("ReVerb") {
     import edu.knowitall.chunkedextractor.{ ExtractionPart => ChunkedPart }
     def reverbPart(extrPart: ChunkedPart[ChunkedToken]) = Part.create(extrPart.text, Some(extrPart.tokenInterval))
@@ -161,4 +164,5 @@ object Extractors {
       }
     }
   }
+    */
 }
